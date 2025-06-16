@@ -11,7 +11,7 @@ import SwiftUI
 import WebKit
 
 @Observable
-final class WebViewModel {
+final class WEWebViewModel {
     var bookmark: [URL]
     var page: WebPage
     

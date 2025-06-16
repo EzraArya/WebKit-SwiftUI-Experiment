@@ -11,10 +11,7 @@ import SwiftUI
 struct WebKitExperimentApp: App {
     var body: some Scene {
         WindowGroup {
-            NavigationStack {
-                ContentView()
-                    .environment(WebViewModel())
-            }
+            ContentView()
         }
     }
 }

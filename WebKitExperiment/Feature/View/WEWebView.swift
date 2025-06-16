@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  WEWebView.swift
 //  WebKitExperiment
 //
 //  Created by Ezra Arya Wijaya on 16/06/25.
@@ -8,8 +8,8 @@
 import SwiftUI
 import WebKit
 
-struct ContentView: View {
-    @Environment(WebViewModel.self) private var viewModel
+struct WEWebView: View {
+    @Environment(WEWebViewModel.self) private var viewModel
     @State private var showBookmark: Bool = false
     
     var body: some View {
@@ -50,7 +50,7 @@ struct ContentView: View {
             }
         }
         .popover(isPresented: $showBookmark) {
-            BookmarkView(bookmark: $viewModel.bookmark)
+            WEBookmarkView(bookmark: $viewModel.bookmark)
         }
         .onAppear {
             viewModel.loadPage(url: URL(string: "https://www.google.com")!)
@@ -58,38 +58,9 @@ struct ContentView: View {
     }
 }
 
-struct BookmarkView: View {
-    @Environment(WebViewModel.self) private var viewModel
-    @Environment(\.dismiss) private var dismiss
-    @Binding var bookmark: [URL]
-    
-    init(bookmark: Binding<[URL]>) {
-        self._bookmark = bookmark
-    }
-    
-    var body: some View {
-        List(bookmark, id: \.self) { url in
-            Text(String(url.absoluteString))
-                .onTapGesture {
-                    viewModel.loadPage(url: url)
-                    dismiss()
-                }
-        }
-        .navigationTitle("Bookmarks")
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button("Done") {
-                    dismiss()
-                }
-            }
-        }
-    }
-}
-
-
 #Preview {
     NavigationStack {
-        ContentView()
-            .environment(WebViewModel())
+        WEWebView()
+            .environment(WEWebViewModel())
     }
 }
