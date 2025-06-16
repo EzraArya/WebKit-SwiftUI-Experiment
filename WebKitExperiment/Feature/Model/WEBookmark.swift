@@ -8,8 +8,8 @@
 import Foundation
 import SwiftUI
 
-struct WEBookmark: Identifiable, Hashable {
-    let id = UUID()
+struct WEBookmark: Identifiable, Hashable, Codable {
+    var id = UUID()
     let url: URL
     let title: String
     
