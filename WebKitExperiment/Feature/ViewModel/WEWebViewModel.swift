@@ -36,22 +36,26 @@ final class WEWebViewModel: WEWebViewModelProtocol {
         }
     }
     
+    @MainActor
     func clearBookmark() {
         bookmarks.removeAll()
     }
     
+    @MainActor
     func goBack() {
         if let item = page.backForwardList.backList.last {
             page.load(item)
         }
     }
     
+    @MainActor
     func goForward() {
         if let item = page.backForwardList.forwardList.first {
             page.load(item)
         }
     }
     
+    @MainActor
     func loadPage(input: String) {
         var url: URL?
         
