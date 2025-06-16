@@ -27,8 +27,8 @@ struct WEWebView: View {
             .toolbar {
                 ToolbarItemGroup(placement: .topBarLeading) {
                     Button {
-                        guard let url = viewModel.page.url else { return } //
-                        viewModel.addBookmark(url: url)
+                        guard let url = viewModel.page.url else { return }
+                        viewModel.addBookmark(title: viewModel.page.title, url: url)
                     } label: {
                         Image(systemName: "plus")
                             .foregroundStyle(.primary)
@@ -70,16 +70,10 @@ struct WEWebView: View {
                         .onSubmit {
                             viewModel.loadPage(input: urlInput)
                         }
-                    
-                    Button {
-                        viewModel.page.reload(fromOrigin: false)
-                    } label: {
-                        Image(systemName: "arrow.clockwise")
-                    }
                 }
             }
             .popover(isPresented: $showBookmark) {
-                WEBookmarkView(bookmark: $viewModel.bookmark)
+                WEBookmarkView(bookmarks: $viewModel.bookmarks)
             }
             .onAppear {
                 if viewModel.page.url == nil {
