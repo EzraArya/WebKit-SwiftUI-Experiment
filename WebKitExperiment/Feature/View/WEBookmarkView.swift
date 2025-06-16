@@ -41,7 +41,7 @@ struct WEBookmarkView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("Clear Bookmarks") {
+                    Button("Clear") {
                         confirmationDialogPresented.toggle()
                     }
                 }
