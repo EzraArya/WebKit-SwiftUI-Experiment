@@ -11,7 +11,7 @@ import SwiftUI
 import WebKit
 
 protocol WEWebViewModelProtocol {
-    var bookmark: [WEBookmark] { get set }
+    var bookmarks: [WEBookmark] { get set }
     var page: WebPage { get set }
     
     func addBookmark(title: String, url: URL)
@@ -21,21 +21,23 @@ protocol WEWebViewModelProtocol {
 
 @Observable
 final class WEWebViewModel: WEWebViewModelProtocol {
-    var bookmark: [WEBookmark]
+    var bookmarks: [WEBookmark]
     var page: WebPage
     
-    init(bookmark: [WEBookmark] = []) {
-        self.bookmark = bookmark
+    init(bookmarks: [WEBookmark] = []) {
+        self.bookmarks = bookmarks
         self.page = WebPage()
     }
     
     func addBookmark(title: String, url: URL) {
-        let newBookmark = WEBookmark(url: url, title: title)
-        bookmark.append(newBookmark)
+        if !bookmarks.contains(where: { $0.url == url }) {
+            let newBookmark = WEBookmark(url: url, title: title)
+            bookmarks.append(newBookmark)
+        }
     }
     
     func clearBookmark() {
-        bookmark.removeAll()
+        bookmarks.removeAll()
     }
     
     func goBack() {
