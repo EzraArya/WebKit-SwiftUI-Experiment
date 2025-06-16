@@ -11,6 +11,7 @@ struct WEBookmarkView: View {
     @Environment(WEWebViewModel.self) private var viewModel
     @Environment(\.dismiss) private var dismiss
     @Binding var bookmarks: [WEBookmark]
+    @State private var confirmationDialogPresented: Bool = false
     
     init(bookmarks: Binding<[WEBookmark]>) {
         self._bookmarks = bookmarks
@@ -39,6 +40,12 @@ struct WEBookmarkView: View {
                 }
             }
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Clear Bookmarks") {
+                        confirmationDialogPresented.toggle()
+                    }
+                }
+                
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Done") {
                         dismiss()
@@ -47,6 +54,13 @@ struct WEBookmarkView: View {
             }
             .navigationTitle("Bookmarks")
             .navigationBarTitleDisplayMode(.inline)
+            .confirmationDialog("Are you sure you want to clear bookmarks?", isPresented: $confirmationDialogPresented) {
+                Button("Clear Bookmarks", role: .destructive) {
+                    viewModel.clearBookmark()
+                }
+                Button("Cancel", role: .cancel) { }
+            }
+
         }
     }
 }
