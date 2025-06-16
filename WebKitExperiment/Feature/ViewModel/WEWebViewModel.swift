@@ -21,14 +21,21 @@ protocol WEWebViewModelProtocol {
 
 @Observable
 final class WEWebViewModel: WEWebViewModelProtocol {
-    var bookmarks: [WEBookmark]
+    var bookmarks: [WEBookmark] {
+        didSet {
+            bookmarkStore.save(bookmarks)
+        }
+    }
     var page: WebPage
+    private let bookmarkStore = WEBookmarkStore()
     
-    init(bookmarks: [WEBookmark] = []) {
-        self.bookmarks = bookmarks
+    init() {
+        self.bookmarks = bookmarkStore.load()
         self.page = WebPage()
     }
     
+    
+    //MARK: Bookmark Methods
     func addBookmark(title: String, url: URL) {
         if !bookmarks.contains(where: { $0.url == url }) {
             let newBookmark = WEBookmark(url: url, title: title)
@@ -41,20 +48,7 @@ final class WEWebViewModel: WEWebViewModelProtocol {
         bookmarks.removeAll()
     }
     
-    @MainActor
-    func goBack() {
-        if let item = page.backForwardList.backList.last {
-            page.load(item)
-        }
-    }
-    
-    @MainActor
-    func goForward() {
-        if let item = page.backForwardList.forwardList.first {
-            page.load(item)
-        }
-    }
-    
+    // MARK: Page Loading Methods
     @MainActor
     func loadPage(input: String) {
         var url: URL?
@@ -75,5 +69,20 @@ final class WEWebViewModel: WEWebViewModelProtocol {
         }
         
         page.load(URLRequest(url: validURL))
+    }
+    
+    // MARK: Navigation Methods
+    @MainActor
+    func goBack() {
+        if let item = page.backForwardList.backList.last {
+            page.load(item)
+        }
+    }
+    
+    @MainActor
+    func goForward() {
+        if let item = page.backForwardList.forwardList.first {
+            page.load(item)
+        }
     }
 }
